@@ -1,7 +1,31 @@
 // ---- Define your dialogs  and panels here ----
 makePanel = define_new_effective_permissions("effectivepan", true)
 $('#sidepanel').append(makePanel)
-define_new_user_select_field()
+
+$('#effectivepan').attr('filepath', '/C/presentation_documents/important_file.txt')
+userSelect = define_new_user_select_field("user_select", "Select", function (selected_user) {
+    $('#effectivepan').attr('username', selected_user)
+})
+$('#sidepanel').append(userSelect)
+
+newDialog = define_new_dialog("new_dialog", "Dialog Box")
+$('.perm_info').click(function () {
+    file = $('#effectivepan').attr('filepath')
+    user = $('#effectivepan').attr('username')
+    permission = $(this).attr('permission_name')
+    console.log(file)
+    console.log(user)
+    console.log(permission)
+
+    fileObj = path_to_file[file]
+    userObj = all_users[user]
+    allow = allow_user_action(fileObj, userObj, permission, true)
+    explanation = get_explanation_text(allow)
+
+    newDialog.empty()
+    newDialog.append(explanation)
+    newDialog.dialog('open')
+})
 // ---- Display file structure ----
 
 // (recursively) makes and returns an html element (wrapped in a jquery object) for a given file object
